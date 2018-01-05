@@ -504,7 +504,7 @@ public class FCMService extends FirebaseMessagingService implements PushConstant
     /*
      * Notification add actions
      */
-    createActions(extras, mBuilder, resources, packageName, notId);
+    createActions(context,extras, mBuilder, resources, packageName, notId);
 
     mNotificationManager.notify(appName, notId, mBuilder.build());
   }
@@ -516,7 +516,7 @@ public class FCMService extends FirebaseMessagingService implements PushConstant
     intent.putExtra(NOT_ID, notId);
   }
 
-  private void createActions(Bundle extras, NotificationCompat.Builder mBuilder, Resources resources,
+  private void createActions(Context context, Bundle extras, NotificationCompat.Builder mBuilder, Resources resources,
       String packageName, int notId) {
     Log.d(LOG_TAG, "create actions: with in-line");
     String actions = extras.getString(ACTIONS);
@@ -569,8 +569,10 @@ public class FCMService extends FirebaseMessagingService implements PushConstant
                 PendingIntent.FLAG_UPDATE_CURRENT);
           }
 
+          // support for localized action titles 
+          String title = localizeKey(context, TITLE, action.getString(TITLE));
           NotificationCompat.Action.Builder actionBuilder = new NotificationCompat.Action.Builder(
-              getImageId(resources, action.optString(ICON, ""), packageName), action.getString(TITLE), pIntent);
+              getImageId(resources, action.optString(ICON, ""), packageName), title, pIntent);
 
           RemoteInput remoteInput = null;
           if (inline) {
@@ -586,7 +588,7 @@ public class FCMService extends FirebaseMessagingService implements PushConstant
           if (inline) {
             mBuilder.addAction(wAction);
           } else {
-            mBuilder.addAction(getImageId(resources, action.optString(ICON, ""), packageName), action.getString(TITLE),
+            mBuilder.addAction(getImageId(resources, action.optString(ICON, ""), packageName), title,
                 pIntent);
           }
           wAction = null;

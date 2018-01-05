@@ -811,6 +811,22 @@ If you wish to include an icon along with the button name, they must be placed i
 }
 ```
 
+Actions can also be localized. (see localization above)
+
+```javascript
+{
+    "registration_ids": ["my device id"],
+    "data": {
+    	"title": "AUX Scrum",
+    	"message": "Scrum: Daily touchbase @ 10am Please be on time so we can cover everything on the agenda.",
+        "actions": [
+    		{ "icon": "emailGuests", "title": { "locKey" : "TXT_EMAIL_GUESTS" } , "callback": "emailGuests", "foreground": true},
+    		{ "icon": "snooze", "title": { "locKey": "TXT_SNOOZE" } , "callback": "snooze", "foreground": false}
+    	]
+    }
+}
+```
+
 Here is an example using fcm-node that sends the above JSON:
 
 ```javascript
